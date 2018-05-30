@@ -1,4 +1,40 @@
+.clearfix::after, .clearfix::before 
+	content: ''
+	height: 0
+	display: block
+	clear: both
 .header 
-	color: red
-	font-size: 20px
+	font-size: 18px
+	color: #fff
+	background: rgba(0,0,0,.4)
+	position: fixed
+	left: 0
+	right: 0
+	.header-content
+		width: 1180px
+		margin: 0 auto
+		line-height: 48px
+		display: flex
 
+		.header-nav
+			flex: 2
+			li
+				list-style: none
+				float: left
+				margin-right: 40px
+				padding: 0 20px
+
+		.rule_mobile_login
+			flex: 1
+			display: flex
+			font-size: 16px
+			.rule_mobile
+				flex: 1
+				color: #ccc
+				span
+					margin-left: 30px
+					&:last-child
+						margin-left: 50px
+			.loginReg 
+				flex: 1
+				text-align: right

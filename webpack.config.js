@@ -18,12 +18,26 @@ module.exports = {
                 include: path.join(__dirname, 'src')
             },
             {
-               test: /\.css$/,
-               use: ['style-loader', 'css-loader']
+               test: /\.(less|css)$/,
+                use:[ 'style-loader','css-loader','less-loader'],
             },
             {
               test: /\.sass$/,
               loaders: ["style-loader", "css-loader?sourceMap", "sass-loader?sourceMap"]
+            },
+            {
+                test: /\.(eot|woff|svg|ttf|woff2|gif|appcache)(\?|$)/,
+                exclude: /^node_modules$/,
+                  use: [
+                    {
+                          loader: "url-loader",
+                          options: {
+                            limit: 20000,
+                            name: '[name].[ext]'
+                          }
+                      }
+                    ]
+                  // loader: 'file-loader?name=[name].[ext]'
             }
         ]
     },
