@@ -1,0 +1,184 @@
+.product
+	.searchNav
+		padding: 10px 15px 5px
+		background: #fff
+		a
+			width: 18%
+			color: #666
+			font-size: 14px
+			display: inline-block
+			text-align: center
+			white-space: nowrap
+			overflow: hidden
+			text-overflow: ellipsis
+			padding: 3px 10px
+			margin: 5px
+			&:hover
+				background: #ccc
+	.productMenu
+		.list
+			.title
+				font-size: 20px
+				padding: 20px 0 10px 15px
+			.items
+				.item
+					width: 100%
+					background: #fff
+					padding: 15px 0
+					border: 1px solid #eee
+					margin-bottom: 12px
+					.proImage
+						
+						display: inline-block
+						text-align: center
+						vertical-align: middle
+						img
+							width: 64px
+							margin-right: 14px
+					.description
+						width: 60%
+						display: inline-block
+						vertical-align: middle
+						font-size: 12px
+						.name
+							font-size: 14px
+							font-weight: 700
+							padding-bottom: 3px
+						.info
+							color: #999
+						.rate
+							color: #999
+					.price
+						em
+							color: #999
+							font-style: normal
+							font-size: 12px
+							&:nth-child(2)
+								font-size: 18px
+								padding-right: 5px
+								color: #000
+					.toCart
+						font-size: 12px
+						color: #fff
+						position: relative
+						right: -80px
+						background: #0089dc
+						padding: 5px 20px
+						border-radius: 20px
+				.menu
+					width: 49%	
+					padding: 0
+					position: relative
+					display: inline-block
+					&:nth-child(2n+1)
+						margin-right: 1%
+					&:nth-child(2n)
+						margin-left: 1%
+					.proImage
+						float: left
+						line-height: 0
+						img
+							width: 100px
+					.description
+						padding-top: 10px
+					.price
+						display: block
+						position: relative
+						bottom: -10px
+						em
+							color: #f74342
+							&:nth-child(2)
+								color:  #f74342
+							&:last-child
+								color: #999
+					.toCart
+						position: absolute
+						bottom: 10px
+						right: 10px
+	.cart
+		width: 320px
+		background: #fff
+		position: fixed
+		bottom: 0
+		right: 0
+		.title
+			line-height: 45px
+			border-top: 2px solid #0089dc
+			padding-left: 10px
+			border-bottom: 1px solid #eee
+		.buyProduct
+			li
+				font-size: 14px
+				line-height: 36px
+				padding: 0 10px
+				border-bottom: 1px solid #eee
+				display: flex
+				text-align: right
+				.name
+					flex: 2
+					text-align: left
+				.count
+					flex: 2
+					text-align: center
+					em
+						font-style: normal
+						padding: 2px 6px
+						border: 1px solid #ccc
+						&:nth-child(2)
+							padding: 2px 12px
+							border-left: none
+							border-right: none
+				.price
+					flex: 1
+					color: #f17530
+		.pay
+			display: flex
+			height: 46px
+			line-height: 46px
+			.pay-info
+				flex: 2
+				color: #fff
+				background: #2c2c2c
+				.cart-icon
+					padding-left: 10px
+					position: relative
+					i
+						font-style: normal
+					em 
+						width: 20px
+						height: 20px
+						padding: 3px 7px
+						color: #fff
+						background: red
+						font-size: 10px
+						line-height: 15px
+						border-radius: 50%
+						font-style: normal
+						position: absolute
+						top: -15px
+						left: 32px
+
+				.total-money
+					em
+						font-size: 14px
+						font-style: normal
+						&:last-child
+							font-size: 18px
+							font-weight: 700
+				.send-money
+					color: #999
+					font-size: 12px
+					padding-left: 10px
+					margin-left: 10px
+					border-left: 1px solid #999
+
+			.pay-button
+				flex: 1
+				font-weight: 700
+				text-align: center
+				background: #e4e4e4
+				&.canPay
+					color: #fff
+					background: green
+
+

@@ -1,6 +1,11 @@
 import React, {Component} from "react";
 import Header from "components/header";
-import { BrowserRouter, HashRouter, Switch, Route, Redirect} from 'react-router-dom';
+import { BrowserRouter, HashRouter, Switch, Route, Redirect, Link} from 'react-router-dom';
+
+import Product from "../product";
+import Rate from "../rate";
+import Seller from "../seller";
+
 require("./index.sass");
 class Home extends Component {
 	renderShopGuide() {
@@ -42,9 +47,9 @@ class Home extends Component {
 			<div className="container">
 				<div className="navLeft">
 					<ul>
-						<li><a href="javascript:;">所有商品</a></li>
-						<li>评价</li>
-						<li>商家资质</li>
+						<li><Link to="/product">所有商品</Link></li>
+						<li><Link to="/rate">评价</Link></li>
+						<li><Link to="/seller">商家资质</Link></li>
 					</ul>
 					<ul>
 						<li className="active">默认排序<i className="fa fa-arrow-down" aria-hidden="true"></i></li>
@@ -71,9 +76,26 @@ class Home extends Component {
 					<div>{shopguide}</div>
 					<div className="showNav">{shopNav}</div>
 
-					// <Route path="/product" component={Product} />
-					// <Route path="/rate" component={Rate} />
-					// <Route path="/seller" component={Seller} />
+					<div className="main">
+						<div className="main-left">
+							<Route path="/product" component={Product} />
+							<Route path="/rate" component={Rate} />
+							<Route path="/seller" component={Seller} />
+							<Redirect from="" to="/product" />
+						</div>
+						<div className="main-right">
+							<div className="title">商家公告</div>
+							<div className="container">
+								<div className="content">
+									<p className="deliveryTitle">配送说明</p>
+									<p className="deliveryContent">配送内容</p>
+								</div>
+								<div className="shopcomplaint">
+									<a href="javascript:;">举报商家</a>
+								</div>
+							</div>
+						</div>
+					</div>
 				</div>
 			</div>
 		)

@@ -12,7 +12,7 @@ class RouteDOM extends Component {
 		return(
 			<Router history={history}>
 				<Switch>
-					<Route path="/app" component={Home} />
+					<Route path="/" component={Home} />
 					<Redirect from="" to="/" />
 				</Switch>
 			</Router>
