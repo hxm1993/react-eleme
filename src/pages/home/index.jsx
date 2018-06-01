@@ -1,6 +1,9 @@
 import React, {Component} from "react";
 import Header from "components/header";
 import { BrowserRouter, HashRouter, Switch, Route, Redirect, Link} from 'react-router-dom';
+import {connect} from "react-redux";
+import {bindActionCreators} from "redux";
+import * as homeAction from "../../redux/actions/home";
 
 import Product from "../product";
 import Rate from "../rate";
@@ -8,29 +11,36 @@ import Seller from "../seller";
 
 require("./index.sass");
 class Home extends Component {
+	constructor(props) {
+		super(props);
+	}
+	componentWillMount() {
+		this.props.actions.getShopMsg()
+	}
 	renderShopGuide() {
+		let seller = this.props.seller;
 		return (
 			<div className="shopGuide">
 				<div className="show-guide-conten">
 					<div className="show-guide-conten-left">
-						<img src="//shadow.elemecdn.com/faas/desktop/media/img/shop-bg.0391dd.jpg" />
+						<img src={seller.avatar} />
 						<p>
-							<span className="show-guide-conten-left-name">名字</span>
+							<span className="show-guide-conten-left-name">{seller.name}</span>
 							<span className="show-guide-conten-left-rate">星星</span>
 						</p>
 					</div>
 					<div className="show-guide-conten-right">
 						<span>
 							<em>起送价</em>
-							<em>20元</em>
+							<em>{seller.minPrice}元</em>
 						</span>
 						<span>
 							<em>配送费</em>
-							<em>优惠配送费¥3</em>
+							<em>优惠配送费¥{seller.deliveryPrice}</em>
 						</span>
 						<span>
-							<em>平均送达速度</em>
-							<em>20元</em>
+							<em>送达速度</em>
+							<em>{seller.deliveryTime}分钟</em>
 						</span>
 						<span className="favorite">
 							<a href="javascript">xxx</a>
@@ -66,9 +76,23 @@ class Home extends Component {
 		)
 	}
 
+	renderSupports() {
+		let seller = this.props.seller;
+		let supports = [];
+		seller.supports && seller.supports.forEach((support,index) => {
+			supports.push(<p className="gonggao" key={index}>{support.description}</p>)
+		})
+		return supports;
+	}
+
 	render() {
+		console.log(this.props)
 		let shopguide = this.renderShopGuide();
 		let shopNav = this.renderShopNav();
+
+		
+		let support = this.renderSupports();
+
 		return(
 			<div className="home">
 				<Header />
@@ -78,17 +102,16 @@ class Home extends Component {
 
 					<div className="main">
 						<div className="main-left">
-							<Route path="/product" component={Product} />
+							<Route path="/product" component={Product} test="this is product"/>
 							<Route path="/rate" component={Rate} />
 							<Route path="/seller" component={Seller} />
-							<Redirect from="" to="/product" />
+							<Redirect from="" to="/rate" />
 						</div>
 						<div className="main-right">
 							<div className="title">商家公告</div>
 							<div className="container">
 								<div className="content">
-									<p className="deliveryTitle">配送说明</p>
-									<p className="deliveryContent">配送内容</p>
+									{support}
 								</div>
 								<div className="shopcomplaint">
 									<a href="javascript:;">举报商家</a>
@@ -102,4 +125,16 @@ class Home extends Component {
 	}
 }
 
-export default Home;
+const mapStateToProps = state => {
+	return {
+		seller: state.home.seller,
+		goods: state.home.goods,
+		ratings: state.home.ratings
+	}
+}
+
+const mapDispatchToProps = (dispatch) => ({
+	actions: bindActionCreators(homeAction,dispatch)
+})
+
+export default connect(mapStateToProps,mapDispatchToProps)(Home);

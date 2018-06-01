@@ -1,21 +1,51 @@
 import React, {Component} from "react";
 import {connect} from "react-redux";
 import {bindActionCreators} from "redux";
-import * as proAction from "../../redux/actions/product";
+import * as homeAction from "../../redux/actions/home";
+
 
 require("./index.sass")
 class Product extends Component {
+// description:"咸粥"
+// icon:"http://fuss10.elemecdn.com/c/cd/c12745ed8a5171e13b427dbc39401jpeg.jpeg?imageView2/1/w/114/h/114"
+// image:"http://fuss10.elemecdn.com/c/cd/c12745ed8a5171e13b427dbc39401jpeg.jpeg?imageView2/1/w/750/h/750"
+// info:"一碗皮蛋瘦肉粥，总是我到粥店时的不二之选。香浓软滑，饱腹暖心，皮蛋的Q弹与瘦肉的滑嫩伴着粥香溢于满口，让人喝这样的一碗粥也觉得心满意足"
+// name:"皮蛋瘦肉粥"
+// oldPrice:""
+// price:10
+// rating:100
+	getDomFromProps() {
+		let goods = this.props.goods;
+		let dom = {search:[],items:[]};
+		goods && goods.forEach(good => {
+			dom.search.push(<a href="javascript:;">{good.name}</a>)
+			good.foods.forEach(food => {
+				dom.items.push(
+					<div className="item clearfix">
+						<span className="proImage"><a href="javascript:;"><img src={food.icon} alt=""/></a></span>
+						<div className="description">
+							<h3 className="name">{food.name}</h3>
+							<p className="info">{food.description}</p>
+							<p className="rate"><span>星星</span> <span>月售</span></p>
+						</div>
+						<span className="price">
+							<em>￥</em>
+							<em>{food.price}</em>
+							{food.oldPrice ?<del>￥{food.oldPrice}</del> : ""}
+							
+						</span>
+						<span className="toCart">加入购物车</span>
+					</div>
+				)
+			})
+		})
+		return dom;
+	}
 
 	renderSearchNav() {
 		return(
 			<div className="searchNav">
-				<a href="javascript:;">热销</a>
-				<a href="javascript:;">热销1</a>
-				<a href="javascript:;">热销2</a>
-				<a href="javascript:;">热销3</a>
-				<a href="javascript:;">热销4</a>
-				<a href="javascript:;">热销5</a>
-				<a href="javascript:;">热销6</a>
+				{this.getDomFromProps().search}
 			</div>
 		)
 	}
@@ -23,34 +53,7 @@ class Product extends Component {
 	renderItems() {
 		return(
 			<div className="items">
-				<div className="item clearfix">
-					<span className="proImage"><a href="javascript:;"><img src="//fuss10.elemecdn.com/f/49/28a540d4274eb00f3b8820b160d7djpeg.jpeg" alt=""/></a></span>
-					<div className="description">
-						<h3 className="name">名字</h3>
-						<p className="info">自带黑珍珠哦</p>
-						<p className="rate"><span>星星</span> <span>月售</span></p>
-					</div>
-					<span className="price">
-						<em>￥</em>
-						<em>18</em>
-						<em>起</em>
-					</span>
-					<span className="toCart">加入购物车</span>
-				</div>
-				<div className="item clearfix">
-					<span className="proImage"><a href="javascript:;"><img src="//fuss10.elemecdn.com/f/49/28a540d4274eb00f3b8820b160d7djpeg.jpeg" alt=""/></a></span>
-					<div className="description">
-						<h3 className="name">名字</h3>
-						<p className="info">自带黑珍珠哦</p>
-						<p className="rate"><span>星星</span> <span>月售</span></p>
-					</div>
-					<span className="price">
-						<em>￥</em>
-						<em>18</em>
-						<em>起</em>
-					</span>
-					<span className="toCart">加入购物车</span>
-				</div>
+				{this.getDomFromProps().items}
 			</div>
 		)
 	}
@@ -70,6 +73,7 @@ class Product extends Component {
 
 
 	render() {
+		console.log("Product-------------------")
 		console.log(this.props)
 		let searchNav = this.renderSearchNav();
 		// let productList = this.productList();
@@ -120,12 +124,13 @@ class Product extends Component {
 
 const mapStateToProps = state => {
 	return {
-		products: state.product.products
+		seller: state.home.seller,
+		goods: state.home.goods
 	}
 }
 
 const mapDispatchToProps = (dispatch) => ({
-	actions: bindActionCreators(proAction,dispatch)
+	actions: bindActionCreators(homeAction,dispatch)
 })
 
 export default connect(mapStateToProps,mapDispatchToProps)(Product);

@@ -24,9 +24,10 @@
 				.item
 					width: 100%
 					background: #fff
-					padding: 15px 0
+					padding: 15px 10px
 					border: 1px solid #eee
 					margin-bottom: 12px
+					position: relative
 					.proImage
 						
 						display: inline-block
@@ -50,21 +51,25 @@
 							color: #999
 					.price
 						em
-							color: #999
+							color: red
 							font-style: normal
 							font-size: 12px
 							&:nth-child(2)
 								font-size: 18px
 								padding-right: 5px
-								color: #000
+						del
+							font-size: 12px
+							color: #999
 					.toCart
 						font-size: 12px
 						color: #fff
-						position: relative
-						right: -80px
+						position: absolute
 						background: #0089dc
 						padding: 5px 20px
 						border-radius: 20px
+						right: 40px
+						top: 50%
+						margin-top: -13px
 				.menu
 					width: 49%	
 					padding: 0
