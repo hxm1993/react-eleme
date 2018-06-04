@@ -6,6 +6,9 @@ import * as homeAction from "../../redux/actions/home";
 
 require("./index.sass")
 class Product extends Component {
+	test() {
+		alert("this is test")
+	}
 // description:"咸粥"
 // icon:"http://fuss10.elemecdn.com/c/cd/c12745ed8a5171e13b427dbc39401jpeg.jpeg?imageView2/1/w/114/h/114"
 // image:"http://fuss10.elemecdn.com/c/cd/c12745ed8a5171e13b427dbc39401jpeg.jpeg?imageView2/1/w/750/h/750"

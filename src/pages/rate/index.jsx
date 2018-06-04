@@ -8,8 +8,12 @@ class Rate extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-            currentTab: 'all'
+            currentTab: 'all',
+            support: 0,
+            oppose: 0
         }
+
+        
 	}
 // avatar:"http://static.galileo.xiaojukeji.com/static/tms/default_header.png"
 // deliveryTime:30
@@ -26,7 +30,19 @@ class Rate extends Component {
 // text:"不错,粥很好喝,我经常吃这一家,非常赞,以后也会常来吃,强烈推荐."
 // username:"3******c"
 // 
-	
+	componentWillReceiveProps(nextProps) {
+		let ratings = nextProps.ratings;
+		let support = ratings && ratings.filter(rating => {
+				return rating.rateType === 0
+		})
+		let oppose = ratings && ratings.filter(rating => {
+				return rating.rateType !== 0
+		})
+		this.setState({
+			support: support.length,
+			oppose: oppose.length
+		})
+	}
 	formatTime(time) {
 		let date = new Date(time);
 		let year = date.getFullYear(),
@@ -89,8 +105,10 @@ class Rate extends Component {
 						</li>
 					)
 			}
-				
+
+			
 		})
+		
 		return dom;
 		
 	}
@@ -102,14 +120,15 @@ class Rate extends Component {
 	}
 
 	render() {
-		console.log(this.props)
 		let currentTab = this.state.currentTab;
+		console.log("rrrrrrrrrrrrrrrrrrrrrr")
+		console.log(this.state)
 		return(
 			<div className="rate">
 				<div className="tab">
-					<a className={currentTab === "all" ? "active" : ""} href="javascript:;" onClick={this.changeTab.bind(this,"all")}>全部</a>
-					<a className={currentTab === "0" ? "active" : ""} href="javascript:;" onClick={this.changeTab.bind(this,"0")}>推荐</a>
-					<a className={currentTab === "1" ? "active" : ""} href="javascript:;" onClick={this.changeTab.bind(this,"1")}>吐槽</a>
+					<a className={currentTab === "all" ? "active" : ""} href="javascript:;" onClick={this.changeTab.bind(this,"all")}>全部 ({this.state.support + this.state.oppose})</a>
+					<a className={currentTab === "0" ? "active" : ""} href="javascript:;" onClick={this.changeTab.bind(this,"0")}>推荐 ({this.state.support})</a>
+					<a className={currentTab === "1" ? "active" : ""} href="javascript:;" onClick={this.changeTab.bind(this,"1")}>吐槽 ({this.state.oppose})</a>
 				</div>
 				<ul className="rateList">
 					{this.renderRatings(this.state.currentTab)}

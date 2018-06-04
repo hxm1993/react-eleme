@@ -52,6 +52,12 @@ class Home extends Component {
 		)
 	}
 	
+	testClick() {
+		alert("testCLick")
+		this.refs.testChild.test();
+		console.log(this)
+	}
+
 	renderShopNav() {
 		return(
 			<div className="container">
@@ -63,7 +69,7 @@ class Home extends Component {
 					</ul>
 					<ul>
 						<li className="active">默认排序<i className="fa fa-arrow-down" aria-hidden="true"></i></li>
-						<li>评分<i className="fa fa-arrow-down" aria-hidden="true"></i></li>
+						<li onClick={this.testClick.bind(this)}>评分<i className="fa fa-arrow-down" aria-hidden="true"></i></li>
 						<li>销量<i className="fa fa-arrow-down" aria-hidden="true"></i></li>
 						<li>价格<i className="fa fa-arrow-down" aria-hidden="true"></i></li>
 						<li><i className="active fa fa-th-large" aria-hidden="true"></i> | <i className="fa fa-th-list" aria-hidden="true"></i></li>
@@ -102,7 +108,7 @@ class Home extends Component {
 
 					<div className="main">
 						<div className="main-left">
-							<Route path="/product" component={Product} test="this is product"/>
+							<Route ref="testChild" path="/product" component={Product} test="this is product"/>
 							<Route path="/rate" component={Rate} />
 							<Route path="/seller" component={Seller} />
 							<Redirect from="" to="/rate" />
