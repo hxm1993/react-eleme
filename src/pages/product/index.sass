@@ -15,9 +15,52 @@
 			margin: 5px
 			&:hover
 				background: #ccc
+	.filter
+		background: #fff
+		margin-bottom: 10px
+		padding: 10px 0
+		li
+			list-style: none
+			display: table-cell
+
+			font-size: 14px
+			padding: 0 18px
+			position: relative
+
+			&:before
+				content: ''
+				height: 15px
+				width: 1px
+				background: #ccc
+				display: inline-block
+				position: relative
+				left: -11px
+				vertical-align: middle
+			&.active
+				color: #0089dc
+				.fa
+					color: #0089dc
+		li:first-child
+			&:before
+				width: 0
+		li:last-child
+			.fa
+				position: relative
+				top: 1px
+		.fa
+			color: #999
+			line-height: 20px
+			position: absolute
+			top: 50%
+			right: 2px
+			margin-top: -10px
+			font-size: 14px
+			&.active
+				color: #0089dc
 	.productMenu
 		.list
 			.title
+				display: inline-block
 				font-size: 20px
 				padding: 20px 0 10px 15px
 			.items
@@ -75,6 +118,9 @@
 					padding: 0
 					position: relative
 					display: inline-block
+					padding: 10px
+					background: #fff
+					margin-bottom: 10px
 					&:nth-child(2n+1)
 						margin-right: 1%
 					&:nth-child(2n)
@@ -82,6 +128,7 @@
 					.proImage
 						float: left
 						line-height: 0
+						margin-right: 10px
 						img
 							width: 100px
 					.description
@@ -91,6 +138,7 @@
 						position: relative
 						bottom: -10px
 						em
+							font-style: normal
 							color: #f74342
 							&:nth-child(2)
 								color:  #f74342
@@ -100,6 +148,10 @@
 						position: absolute
 						bottom: 10px
 						right: 10px
+						color: #fff
+						background: #0089dc
+						padding: 5px 20px
+						border-radius: 20px
 	.cart
 		width: 320px
 		background: #fff
@@ -185,5 +237,6 @@
 				&.canPay
 					color: #fff
 					background: green
+
 
 

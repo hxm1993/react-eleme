@@ -1,14 +1,11 @@
 import React, {Component} from "react";
 import {connect} from "react-redux";
 import {bindActionCreators} from "redux";
-import * as homeAction from "../../redux/actions/home";
+import * as productAction from "../../redux/actions/product";
 
 
 require("./index.sass")
 class Product extends Component {
-	test() {
-		alert("this is test")
-	}
 // description:"咸粥"
 // icon:"http://fuss10.elemecdn.com/c/cd/c12745ed8a5171e13b427dbc39401jpeg.jpeg?imageView2/1/w/114/h/114"
 // image:"http://fuss10.elemecdn.com/c/cd/c12745ed8a5171e13b427dbc39401jpeg.jpeg?imageView2/1/w/750/h/750"
@@ -17,14 +14,51 @@ class Product extends Component {
 // oldPrice:""
 // price:10
 // rating:100
-	getDomFromProps() {
-		let goods = this.props.goods;
-		let dom = {search:[],items:[]};
+	
+	constructor(props) {
+		super(props);
+		this.props.actions.getProduct();
+		this.state = {
+			currentFilter: 'default',
+			displayMethod: 'list',
+			goods: [],
+			goodForCart: []
+		}
+	}
+
+	componentWillReceiveProps(nextProps) {
+		console.log("_----------------------")
+		console.log(nextProps)
+		this.setState({
+			goods: nextProps.goods,
+			goodForCart: nextProps.goodForCart
+		})
+	}
+
+	addToCart(name) {
+		this.props.actions.addToCart(name);
+		// productAction.addToCart(name);
+		// this.state.goods.forEach(good => {
+		// 	good.foods.forEach(food => {
+		// 		if(food.name === name) {
+		// 			food.buyCount = 1;
+		// 			this.setState({
+		// 				goodForCart: [...this.state.goodForCart,food]
+		// 			})
+		// 		}
+		// 	})
+		// })
+	}
+
+	getItems() {
+		let dom = [];
+		let goods = this.state.goods;
+		let displayMethod = this.state.displayMethod;
 		goods && goods.forEach(good => {
-			dom.search.push(<a href="javascript:;">{good.name}</a>)
 			good.foods.forEach(food => {
-				dom.items.push(
-					<div className="item clearfix">
+
+				dom.push(
+					<div className={displayMethod==='list' ? 'item clearfix' : 'menu clearfix'}>
 						<span className="proImage"><a href="javascript:;"><img src={food.icon} alt=""/></a></span>
 						<div className="description">
 							<h3 className="name">{food.name}</h3>
@@ -37,10 +71,34 @@ class Product extends Component {
 							{food.oldPrice ?<del>￥{food.oldPrice}</del> : ""}
 							
 						</span>
-						<span className="toCart">加入购物车</span>
+						<span className="toCart" onClick={this.addToCart.bind(this,food.name)}>加入购物车</span>
 					</div>
 				)
 			})
+		})
+		return dom;
+	}
+	scrollToAnchor = (anchorName) => {
+	    if (anchorName) {
+	        let anchorElement = document.getElementById(anchorName);
+	        if(anchorElement) { anchorElement.scrollIntoView(); }
+	    }
+	}
+	getDomFromProps() {
+		// let goods = this.props.goods;
+		let goods = this.state.goods;
+		let dom = {search:[],items:[]};
+		let displayMethod = this.state.displayMethod;
+		goods && goods.forEach(good => {
+			dom.search.push(<a onClick={()=>this.scrollToAnchor(good.name)}>{good.name}</a>)
+			
+			dom.items.push(<div>
+				<a name={good.name}></a>
+				<a className="title" id={good.name}>{good.name}</a>
+				<div>
+					{this.getItems()}
+				</div>
+			</div>)
 		})
 		return dom;
 	}
@@ -66,46 +124,99 @@ class Product extends Component {
 		return(
 			<div className="productMenu">
 				<div className="list">
-					<div className="title">热销啊</div>
 					{productItems}
-
 				</div>
 			</div>
 		)
 	}
 
+	changeFilter(filter) {
+		
+		if(filter === 'menu' || filter === 'list'){
+			this.setState({
+				displayMethod: filter
+			})
+		}else {
+			this.setState({
+				currentFilter: filter
+			})
+			if(filter === "default") {
+				this.setState({
+					goods: this.props.goods
+				})
+			}else {
+				var tempGoods = JSON.parse(JSON.stringify(this.state.goods));			
+
+				tempGoods.forEach(g => {
+					g.foods.sort((a,b) => {return a[filter] - b[filter]})
+				})
+				this.setState({
+					goods: tempGoods
+				})
+			}
+
+		}
+	}
+	
+	changeCount(name, str) {
+		this.props.actions.optionCount(name,str);
+	}
+
+	renderCart() {
+		let goods = [];
+		let goodForCart = this.props.addToCart;
+		goodForCart && goodForCart.forEach(good => {
+			goods.push(
+				<li>
+					<span className="name">{good.name}</span>
+					<span className="count">
+								<em onClick={this.changeCount.bind(this,good.name,'reduce')}>-</em>
+								<em>{good.buyCount}</em>
+								<em onClick={this.changeCount.bind(this,good.name,'add')}>+</em>
+					</span>
+					<span className="price">￥{good.price}</span>
+				</li>
+			)
+		})
+		return goods;
+	}
 
 	render() {
-		console.log("Product-------------------")
-		console.log(this.props)
+		console.log( this.props.addToCart)
 		let searchNav = this.renderSearchNav();
 		// let productList = this.productList();
 		let productMenu = this.renderProductMenu();
+		let currentFilter = this.state.currentFilter;
+		let displayMethod = this.state.displayMethod;
+		let cart = this.renderCart();
 		return(
 			<div className="product">
+				<ul className="filter">
+						<li onClick={this.changeFilter.bind(this,'default')} 
+							className={currentFilter === 'default' ? "active" : ""}
+						>默认排序<i className="fa fa-arrow-down" aria-hidden="true"></i></li>
+						<li onClick={this.changeFilter.bind(this,'rating')}
+							className={currentFilter === 'rating' ? "active" : ""}>评分<i className="fa fa-arrow-down" aria-hidden="true"></i></li>
+						<li onClick={this.changeFilter.bind(this,'sellCount')}
+							className={currentFilter === 'sellCount' ? "active" : ""}>销量<i className="fa fa-arrow-down" aria-hidden="true"></i></li>
+						<li onClick={this.changeFilter.bind(this,'price')}
+							className={currentFilter === 'price' ? "active" : ""}>价格<i className="fa fa-arrow-down" aria-hidden="true"></i></li>
+						<li>
+							<i 
+								className={displayMethod === 'menu' ? "active fa fa-th-large" : "fa fa-th-large"}
+								aria-hidden="true" onClick={this.changeFilter.bind(this,'menu')} >
+							</i> |  <i 
+								className={displayMethod === 'list' ? "active fa fa-th-list" : "fa fa-th-list"}
+								aria-hidden="true" onClick={this.changeFilter.bind(this,'list')}>
+							</i>
+						</li>
+				</ul>
 				{searchNav}
 				{productMenu}
 				<div className="cart">
 					<div className="title"><span>购物车</span><span>[清空]</span></div>
 					<ul className="buyProduct">
-						<li>
-							<span className="name">product1</span>
-							<span className="count">
-								<em>-</em>
-								<em>1</em>
-								<em>+</em>
-							</span>
-							<span className="price">￥25</span>
-						</li>
-						<li>
-							<span className="name">product1</span>
-							<span className="count">
-								<em>-</em>
-								<em>1</em>
-								<em>+</em>
-							</span>
-							<span className="price">￥25</span>
-						</li>
+						{cart}
 					</ul>
 					<div className="pay">
 						<div className="pay-info">
@@ -126,14 +237,17 @@ class Product extends Component {
 }
 
 const mapStateToProps = state => {
+	console.log("!!!!!!!!!!!!!!!!!!!")
+	console.log(state)
 	return {
 		seller: state.home.seller,
-		goods: state.home.goods
+		goods: state.product.goods,
+		addToCart: state.product.addToCart
 	}
 }
 
 const mapDispatchToProps = (dispatch) => ({
-	actions: bindActionCreators(homeAction,dispatch)
+	actions: bindActionCreators(productAction,dispatch)
 })
 
 export default connect(mapStateToProps,mapDispatchToProps)(Product);

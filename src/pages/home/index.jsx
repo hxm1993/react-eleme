@@ -11,6 +11,21 @@ import Seller from "../seller";
 
 require("./index.sass");
 class Home extends Component {
+	scrollHandler = this.handleScroll.bind(this);
+	componentDidMount() {
+      window.addEventListener('scroll', this.scrollHandler);
+    }
+     _handleScroll(scrollTop) {
+         console.log(scrollTop)
+         //滚动条距离页面的高度
+        
+    }
+    handleScroll(event) {
+        let scrollTop = event.srcElement.body.scrollTop;
+        console.log(event)
+        this._handleScroll(scrollTop);
+    }
+
 	constructor(props) {
 		super(props);
 	}
@@ -53,9 +68,7 @@ class Home extends Component {
 	}
 	
 	testClick() {
-		alert("testCLick")
-		this.refs.testChild.test();
-		console.log(this)
+		this.refs.testChild.test()
 	}
 
 	renderShopNav() {
@@ -67,13 +80,7 @@ class Home extends Component {
 						<li><Link to="/rate">评价</Link></li>
 						<li><Link to="/seller">商家资质</Link></li>
 					</ul>
-					<ul>
-						<li className="active">默认排序<i className="fa fa-arrow-down" aria-hidden="true"></i></li>
-						<li onClick={this.testClick.bind(this)}>评分<i className="fa fa-arrow-down" aria-hidden="true"></i></li>
-						<li>销量<i className="fa fa-arrow-down" aria-hidden="true"></i></li>
-						<li>价格<i className="fa fa-arrow-down" aria-hidden="true"></i></li>
-						<li><i className="active fa fa-th-large" aria-hidden="true"></i> | <i className="fa fa-th-list" aria-hidden="true"></i></li>
-					</ul>
+					
 				</div>
 				<div className="navRight">
 					<input type="search" placeholder="search" />
@@ -108,10 +115,10 @@ class Home extends Component {
 
 					<div className="main">
 						<div className="main-left">
-							<Route ref="testChild" path="/product" component={Product} test="this is product"/>
+							<Route path="/product" component={Product}/>
 							<Route path="/rate" component={Rate} />
 							<Route path="/seller" component={Seller} />
-							<Redirect from="" to="/rate" />
+							<Redirect from="" to="/product" />
 						</div>
 						<div className="main-right">
 							<div className="title">商家公告</div>
