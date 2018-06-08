@@ -15,23 +15,9 @@ class Rate extends Component {
 
         
 	}
-// avatar:"http://static.galileo.xiaojukeji.com/static/tms/default_header.png"
-// deliveryTime:30
-// rateTime:1469281964000
-// rateType:0
-// recommend:Array(5)
-// 0:"南瓜粥"
-// 1:"皮蛋瘦肉粥"
-// 2:"扁豆焖面"
-// 3:"娃娃菜炖豆腐"
-// 4:"牛肉馅饼"
 
-// score:5
-// text:"不错,粥很好喝,我经常吃这一家,非常赞,以后也会常来吃,强烈推荐."
-// username:"3******c"
-// 
-	componentWillReceiveProps(nextProps) {
-		let ratings = nextProps.ratings;
+	componentWillMount() {
+		let ratings = this.props.ratings;
 		let support = ratings && ratings.filter(rating => {
 				return rating.rateType === 0
 		})

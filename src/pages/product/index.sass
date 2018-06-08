@@ -164,6 +164,8 @@
 			padding-left: 10px
 			border-bottom: 1px solid #eee
 		.buyProduct
+			max-height: 200px
+			overflow-y: auto
 			li
 				font-size: 14px
 				line-height: 36px
@@ -172,8 +174,11 @@
 				display: flex
 				text-align: right
 				.name
-					flex: 2
+					flex: 3
 					text-align: left
+					white-space: nowrap
+					overflow: hidden
+					text-overflow: ellipsis
 				.count
 					flex: 2
 					text-align: center

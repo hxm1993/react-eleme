@@ -8,6 +8,7 @@ import * as homeAction from "../../redux/actions/home";
 import Product from "../product";
 import Rate from "../rate";
 import Seller from "../seller";
+import Star from "../../components/star";
 
 require("./index.sass");
 class Home extends Component {
@@ -15,15 +16,15 @@ class Home extends Component {
 	componentDidMount() {
       window.addEventListener('scroll', this.scrollHandler);
     }
-     _handleScroll(scrollTop) {
-         console.log(scrollTop)
-         //滚动条距离页面的高度
-        
-    }
     handleScroll(event) {
-        let scrollTop = event.srcElement.body.scrollTop;
-        console.log(event)
-        this._handleScroll(scrollTop);
+        let scrollTop = event.srcElement.documentElement.scrollTop;
+        if(scrollTop >= 300) {
+        	document.getElementsByClassName("searchNav")[0].style.position = 'fixed';
+        	document.getElementsByClassName("searchNav")[0].style.top = '0';
+        	document.getElementsByClassName("searchNav")[0].style.zIndex = '1110';
+        }else {
+        	document.getElementsByClassName("searchNav")[0].style.position = 'unset';
+        }
     }
 
 	constructor(props) {
@@ -41,7 +42,7 @@ class Home extends Component {
 						<img src={seller.avatar} />
 						<p>
 							<span className="show-guide-conten-left-name">{seller.name}</span>
-							<span className="show-guide-conten-left-rate">星星</span>
+							<Star score={seller.score}></Star>
 						</p>
 					</div>
 					<div className="show-guide-conten-right">

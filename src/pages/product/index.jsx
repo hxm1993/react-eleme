@@ -37,44 +37,42 @@ class Product extends Component {
 
 	addToCart(name) {
 		this.props.actions.addToCart(name);
-		// productAction.addToCart(name);
-		// this.state.goods.forEach(good => {
-		// 	good.foods.forEach(food => {
-		// 		if(food.name === name) {
-		// 			food.buyCount = 1;
-		// 			this.setState({
-		// 				goodForCart: [...this.state.goodForCart,food]
-		// 			})
-		// 		}
-		// 	})
-		// })
 	}
 
-	getItems() {
+	clearCart() {
+		this.props.actions.clearCart();
+	}
+
+	getItems(name,nextName="") {
 		let dom = [];
 		let goods = this.state.goods;
 		let displayMethod = this.state.displayMethod;
 		goods && goods.forEach(good => {
-			good.foods.forEach(food => {
+			if(good.name ===name){
+				let length = good.foods.length;
+				good.foods.forEach((food,i) => {
 
-				dom.push(
-					<div className={displayMethod==='list' ? 'item clearfix' : 'menu clearfix'}>
-						<span className="proImage"><a href="javascript:;"><img src={food.icon} alt=""/></a></span>
-						<div className="description">
-							<h3 className="name">{food.name}</h3>
-							<p className="info">{food.description}</p>
-							<p className="rate"><span>星星</span> <span>月售</span></p>
+					dom.push(
+						<div id={i === length-1 ? nextName : ""} className={displayMethod==='list' ? 'item clearfix' : 'menu clearfix'}>
+						
+							<span className="proImage"><a href="javascript:;"><img src={food.icon} alt=""/></a></span>
+							<div className="description">
+								<h3 className="name">{food.name}</h3>
+								<p className="info">{food.description}</p>
+								<p className="rate"><span>星星</span> <span>月售</span></p>
+							</div>
+							<span className="price">
+								<em>￥</em>
+								<em>{food.price}</em>
+								{food.oldPrice ?<del>￥{food.oldPrice}</del> : ""}
+								
+							</span>
+							<span className="toCart" onClick={this.addToCart.bind(this,food.name)}>加入购物车</span>
 						</div>
-						<span className="price">
-							<em>￥</em>
-							<em>{food.price}</em>
-							{food.oldPrice ?<del>￥{food.oldPrice}</del> : ""}
-							
-						</span>
-						<span className="toCart" onClick={this.addToCart.bind(this,food.name)}>加入购物车</span>
-					</div>
-				)
-			})
+					)
+				})
+			}
+			
 		})
 		return dom;
 	}
@@ -89,14 +87,14 @@ class Product extends Component {
 		let goods = this.state.goods;
 		let dom = {search:[],items:[]};
 		let displayMethod = this.state.displayMethod;
-		goods && goods.forEach(good => {
+		goods && goods.forEach((good,i) => {
 			dom.search.push(<a onClick={()=>this.scrollToAnchor(good.name)}>{good.name}</a>)
 			
 			dom.items.push(<div>
 				<a name={good.name}></a>
-				<a className="title" id={good.name}>{good.name}</a>
+				<a className="title" id={i==0 ? good.name : ""}>{good.name}</a>
 				<div>
-					{this.getItems()}
+					{i != goods.length - 1 ? this.getItems(good.name,goods[i+1].name) : this.getItems(good.name)}
 				</div>
 			</div>)
 		})
@@ -214,7 +212,7 @@ class Product extends Component {
 				{searchNav}
 				{productMenu}
 				<div className="cart">
-					<div className="title"><span>购物车</span><span>[清空]</span></div>
+					<div className="title"><span>购物车</span><span onClick={this.clearCart.bind(this)}>[清空]</span></div>
 					<ul className="buyProduct">
 						{cart}
 					</ul>
@@ -222,12 +220,20 @@ class Product extends Component {
 						<div className="pay-info">
 							<span className="cart-icon">
 								<i>图标</i>
-								<em>2</em>
+								<em>{this.props.addToCart.length}</em>
 							</span>
-							<span className="total-money"><em>￥</em><em>26</em></span>
-							<span className="send-money">配送费3元</span>
+							<span className="total-money"><em>￥</em><em>{this.props.totalPrice}</em></span>
+							<span className="send-money">配送费{this.props.seller.deliveryPrice}元</span>
 						</div>
-						<div className="pay-button">20起送</div>
+						{this.props.totalPrice >= 20 ? 
+							<div className="pay-button canPay" onClick={()=>{window.alert("您需支付金额为：" + (this.props.totalPrice + this.props.seller.deliveryPrice) + "元")}}>
+								支付
+							</div>
+							:
+							<div className="pay-button">
+								20起送
+							</div>
+						}
 					</div>
 				</div>
 			</div>
@@ -242,7 +248,8 @@ const mapStateToProps = state => {
 	return {
 		seller: state.home.seller,
 		goods: state.product.goods,
-		addToCart: state.product.addToCart
+		addToCart: state.product.addToCart,
+		totalPrice: state.product.totalPrice
 	}
 }
 

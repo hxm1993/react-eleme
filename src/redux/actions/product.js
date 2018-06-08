@@ -1,6 +1,12 @@
 import * as types from "../types";
 import api from "../api";
 
+function returnClearCart() {
+	return {
+		type: types.CLEAR_CART
+	}
+}
+
 function returnReduceCount(data) {
 	return {
 		type: types.OPTION_COUNT,
@@ -39,5 +45,11 @@ export function addToCart(name) {
 export function optionCount(name,opt) {
 	return (dispatch) => {
 		dispatch(returnReduceCount({name:name,option:opt}))
+	}
+}
+
+export function clearCart() {
+	return (dispatch) => {
+		dispatch(returnClearCart())
 	}
 }

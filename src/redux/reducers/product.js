@@ -2,7 +2,8 @@ import * as types from "../types";
 
 const initialState = {
 	goods: [],
-	addToCart: []
+	addToCart: [],
+	totalPrice: 0
 }
 
 export default function product(state=initialState, action) {
@@ -31,12 +32,14 @@ export default function product(state=initialState, action) {
 			if(!tempFlag) {
 				tempFood.buyCount = 1;
 				return Object.assign({},state,{
-					addToCart: [...state.addToCart, tempFood]
+					addToCart: [...state.addToCart, tempFood],
+					totalPrice: state.totalPrice + tempFood.price
 				});
 			}else {
 				tempFood.buyCount ++;
 				return Object.assign({},state,{
-					addToCart: [...state.addToCart.splice(0,index), tempFood, ...state.addToCart.splice(index+1)]
+					addToCart: [...state.addToCart.splice(0,index), tempFood, ...state.addToCart.splice(index+1)],
+					totalPrice: state.totalPrice + tempFood.price
 				});
 			}
 			
@@ -44,13 +47,16 @@ export default function product(state=initialState, action) {
 			let temp= {};
 			let foodIndex = 0;
 			let flag = 1;
+			let totalPrice = state.totalPrice;
 			state.addToCart.forEach((food,i) => {
 				if(food.name === action.data.name) {
 					temp = food;
 					if(action.data.option === 'reduce') {
 						flag = --temp.buyCount === 0 ? 0 : 1;
+						totalPrice -= temp.price;
 					}else {
 						temp.buyCount ++;
+						totalPrice += temp.price;
 					}
 					foodIndex = i;
 				}
@@ -58,16 +64,23 @@ export default function product(state=initialState, action) {
 			let temp1 = null;
 			if(flag) {
 				temp1 = Object.assign({},state,{
-					addToCart: [...state.addToCart.splice(0,foodIndex), temp, ...state.addToCart.splice(foodIndex+1)]
+					addToCart: [...state.addToCart.splice(0,foodIndex), temp, ...state.addToCart.splice(foodIndex+1)],
+					totalPrice: totalPrice <= 0 ? 0 : totalPrice
 				})
 			}else {
 				temp1 = Object.assign({},state,{
-					addToCart: [...state.addToCart.splice(0,foodIndex),  ...state.addToCart.splice(foodIndex+1)]
+					addToCart: [...state.addToCart.splice(0,foodIndex),  ...state.addToCart.splice(foodIndex+1)],
+					totalPrice: totalPrice <= 0 ? 0 : totalPrice
 				})
 			}
 			
 			console.log(temp1)
 			return temp1;
+		case types.CLEAR_CART: 
+			return Object.assign({},state,{
+				addToCart: [],
+				totalPrice: 0
+			})
 		default:
 			return state;
 	}
