@@ -216,7 +216,7 @@ class Product extends Component {
 					<div className="pay">
 						<div className="pay-info">
 							<span className="cart-icon">
-								<i>图标</i>
+								<i><i class="fa fa-shopping-cart" aria-hidden="true"></i></i>
 								<em>{this.props.addToCart.length}</em>
 							</span>
 							<span className="total-money"><em>￥</em><em>{this.props.totalPrice}</em></span>
