@@ -29,7 +29,7 @@ class Star extends Component {
 	render() {
 		let star = this.renderStar()
 		return(
-			<span className="show-guide-conten-left-rate">{star}</span>
+			<span>{star}</span>
 		)
 	}
 }

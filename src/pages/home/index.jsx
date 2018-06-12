@@ -29,9 +29,17 @@ class Home extends Component {
 
 	constructor(props) {
 		super(props);
+		this.state={
+			IsFavorite: false
+		}
 	}
 	componentWillMount() {
 		this.props.actions.getShopMsg()
+	}
+	changeFavorite() {
+		this.setState({
+			IsFavorite: !this.state.IsFavorite
+		})
 	}
 	renderShopGuide() {
 		let seller = this.props.seller;
@@ -42,7 +50,7 @@ class Home extends Component {
 						<img src={seller.avatar} />
 						<p>
 							<span className="show-guide-conten-left-name">{seller.name}</span>
-							<Star score={seller.score}></Star>
+							<span className="show-guide-conten-left-rate"><Star score={seller.score}></Star></span>
 						</p>
 					</div>
 					<div className="show-guide-conten-right">
@@ -59,7 +67,10 @@ class Home extends Component {
 							<em>{seller.deliveryTime}分钟</em>
 						</span>
 						<span className="favorite">
-							<a href="javascript">xxx</a>
+							<a href="javascript:;"
+								className = {this.state.IsFavorite ? 'active' : ''}
+								 onClick={this.changeFavorite.bind(this)}><i class="fa fa-heart" aria-hidden="true"></i></a>
+								
 							<span>收藏</span>
 						</span>
 					</div>
@@ -83,9 +94,7 @@ class Home extends Component {
 					</ul>
 					
 				</div>
-				<div className="navRight">
-					<input type="search" placeholder="search" />
-				</div>
+				
 			</div>
 		)
 	}
@@ -100,7 +109,6 @@ class Home extends Component {
 	}
 
 	render() {
-		console.log(this.props)
 		let shopguide = this.renderShopGuide();
 		let shopNav = this.renderShopNav();
 

@@ -2,7 +2,7 @@ import React, {Component} from "react";
 import {connect} from "react-redux";
 import {bindActionCreators} from "redux";
 import * as productAction from "../../redux/actions/product";
-
+import Star from "../../components/star";
 
 require("./index.sass")
 class Product extends Component {
@@ -27,8 +27,6 @@ class Product extends Component {
 	}
 
 	componentWillReceiveProps(nextProps) {
-		console.log("_----------------------")
-		console.log(nextProps)
 		this.setState({
 			goods: nextProps.goods,
 			goodForCart: nextProps.goodForCart
@@ -59,7 +57,7 @@ class Product extends Component {
 							<div className="description">
 								<h3 className="name">{food.name}</h3>
 								<p className="info">{food.description}</p>
-								<p className="rate"><span>星星</span> <span>月售</span></p>
+								<p className="rate"><span>好评率{food.rating}%  </span> <span>月售{food.sellCount}份</span></p>
 							</div>
 							<span className="price">
 								<em>￥</em>
@@ -180,7 +178,6 @@ class Product extends Component {
 	}
 
 	render() {
-		console.log( this.props.addToCart)
 		let searchNav = this.renderSearchNav();
 		// let productList = this.productList();
 		let productMenu = this.renderProductMenu();
@@ -243,8 +240,6 @@ class Product extends Component {
 }
 
 const mapStateToProps = state => {
-	console.log("!!!!!!!!!!!!!!!!!!!")
-	console.log(state)
 	return {
 		seller: state.home.seller,
 		goods: state.product.goods,
